@@ -16,12 +16,12 @@ Midi midi;
 const char* gMidiPort0 = "hw:0,0";
 
 #define NUMINPUT 8
-int inputcc[NUMINPUT] = {77, 78, 79, 80, 81, 82, 83, 84};
+int inputcc[NUMINPUT] = {1, 2, 3, 4, 5, 6, 7, 8};
 float inputval[NUMINPUT] = {-1., -1., -1., -1., -1., -1., -1., -1.};
 enum  inputkey{input1, input2, input3, input4, input5, input6, input7, input8};
 
 #define NUMOUTPUT 8
-int outputcc[NUMINPUT] = {77, 78, 79, 80, 81, 82, 83, 84};
+int outputcc[NUMINPUT] = {1, 2, 3, 4, 5, 6, 7, 8};
 float outputval[NUMOUTPUT] = {-1., -1., -1., -1., -1., -1., -1., -1.};
 enum  outputkey{output1, output2, output3, output4, output5, output6, output7, output8};
 
