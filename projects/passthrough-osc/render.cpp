@@ -13,8 +13,9 @@ const char* remoteIp = "192.168.6.1";
 
 int gAudioChannelNum;  // number of audio channels to iterate over
 int gAnalogChannelNum; // number of analog channels to iterate over
-float gInterval = 0.05;
-int gCount = 0;
+
+unsigned int gInterval = 20; // how often to send an OSC message (per second)
+unsigned int gCount = 0;
 
 #define NUMINPUT 8
 char *inputstr[NUMINPUT] = {"/bela/input1", "/bela/input2", "/bela/input3", "/bela/input4", "/bela/input5", "/bela/input6", "/bela/input7", "/bela/input8"};
@@ -66,7 +67,7 @@ void render(BelaContext *context, void *userData)
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
 		float audioval[gAudioChannelNum];
 		for(unsigned int ch = 0; ch < gAudioChannelNum; ch++){
-			audioval[ch] = audioRead(context, n, ch) * inputval[ch];
+			audioval[ch] = audioRead(context, n, ch);
 			audioWrite(context, n, ch, audioval[ch]);
 		}
 		// show analog output values on the scope
@@ -89,13 +90,14 @@ void render(BelaContext *context, void *userData)
 		inputval[ch] /= context->analogFrames;
 	}
 
+	// once in a while send the analog input as OSC message
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
 		gCount++;
-
-		if(gCount % (int)(context->audioSampleRate*gInterval) == 0) {
-			for(unsigned int ch = 0; ch < NUMOUTPUT; ch++) {
+		if(gCount % (int)(context->audioSampleRate/gInterval) == 0) {
+			for (unsigned int ch = 0; ch < NUMINPUT; ch++) {
 				oscSender.newMessage(inputstr[ch]).add(inputval[ch]).send();
 			}
+			gCount = 0;
 		}
 	}
 }
