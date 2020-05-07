@@ -4,15 +4,15 @@
 #include <libraries/Scope/Scope.h>
 
 Scope scope;
-
 OscReceiver oscReceiver;
 OscSender oscSender;
+
+const char* remoteIp = "192.168.6.1";
 int localPort = 7562;
 int remotePort = 7563;
-const char* remoteIp = "192.168.6.1";
 
-int gAudioChannelNum;  // number of audio channels to iterate over
-int gAnalogChannelNum; // number of analog channels to iterate over
+unsigned int gAudioChannelNum;  // number of audio channels to iterate over
+unsigned int gAnalogChannelNum; // number of analog channels to iterate over
 
 unsigned int gInterval = 20; // how often to send an OSC message (per second)
 unsigned int gCount = 0;
@@ -29,8 +29,8 @@ enum  outputkey{output1, output2, output3, output4, output5, output6, output7, o
 
 void on_receive(oscpkt::Message* msg, void* arg)
 {
-	for (unsigned int ch = 0; ch < NUMINPUT; ch++) {
-		if(msg->match(outputstr[ch])){
+	for (unsigned int ch = 0; ch < gAnalogChannelNum; ch++) {
+		if(msg->match(outputstr[ch])) {
 			msg->match(outputstr[ch]).popFloat(outputval[ch]).isOkNoMoreArgs();
 			printf("%s = %f\n", outputstr[ch], outputval[ch]);
 		}
@@ -43,13 +43,15 @@ bool setup(BelaContext *context, void *userData)
 
 	// Check that we have the same number of inputs and outputs.
 	if(context->audioInChannels != context->audioOutChannels ||
-			context->analogInChannels != context-> analogOutChannels){
+			context->analogInChannels != context-> analogOutChannels) {
 		printf("Different number of outputs and inputs available. Working with what we have.\n");
 	}
 
 	// use the minimum number of channels between input and output
 	gAudioChannelNum = std::min(context->audioInChannels, context->audioOutChannels);
 	gAnalogChannelNum = std::min(context->analogInChannels, context->analogOutChannels);
+  gAnalogChannelNum = std::min(gAnalogChannelNum, NUMINPUT);
+  gAnalogChannelNum = std::min(gAnalogChannelNum, NUMOUTPUT);
 
 	// tell the scope how many channels and the sample rate
 	scope.setup(gAudioChannelNum, context->audioSampleRate);
@@ -66,7 +68,7 @@ void render(BelaContext *context, void *userData)
 	// pass audio inputs through to outputs
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
 		float audioval[gAudioChannelNum];
-		for(unsigned int ch = 0; ch < gAudioChannelNum; ch++){
+		for(unsigned int ch = 0; ch < gAudioChannelNum; ch++) {
 			audioval[ch] = audioRead(context, n, ch);
 			audioWrite(context, n, ch, audioval[ch]);
 		}
@@ -94,7 +96,7 @@ void render(BelaContext *context, void *userData)
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
 		gCount++;
 		if(gCount % (int)(context->audioSampleRate/gInterval) == 0) {
-			for (unsigned int ch = 0; ch < NUMINPUT; ch++) {
+			for (unsigned int ch = 0; ch < gAnalogChannelNum; ch++) {
 				oscSender.newMessage(inputstr[ch]).add(inputval[ch]).send();
 			}
 			gCount = 0;
