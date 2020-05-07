@@ -8,6 +8,7 @@
 !*.ini
 !*.sh
 !*.md
+!*.pd
 
 # ...even if they are in subdirectories
 !*/
