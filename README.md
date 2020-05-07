@@ -6,7 +6,7 @@ This [EEGsynth](https://github.com/eegsynth/eegsynth) repository contains C/C++ 
 
 ## How to connect the Bela to the internet
 
-To use git and GitHub in combination with your Bela you have to get it connected to the internet. Connecting it to yout local computer as 192.168.6.2 is not sufficient. If you have a wired ethernet cable, you can just plug it in and reboot with 
+To use git and GitHub in combination with your Bela you have to get it connected to the internet. Connecting it to your local computer as 192.168.6.2 is not sufficient. If you have a wired ethernet cable, you can just plug it in and reboot with 
 
     ssh root@bela
     reboot now
