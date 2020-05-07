@@ -52,8 +52,8 @@ bool setup(BelaContext *context, void *userData)
 	// use the minimum number of channels between input and output
 	gAudioChannelNum = std::min(context->audioInChannels, context->audioOutChannels);
 	gAnalogChannelNum = std::min(context->analogInChannels, context->analogOutChannels);
-  gAnalogChannelNum = std::min(gAnalogChannelNum, NUMINPUT);
-  gAnalogChannelNum = std::min(gAnalogChannelNum, NUMOUTPUT);
+	gAnalogChannelNum = std::min(gAnalogChannelNum, (unsigned int)NUMINPUT);
+	gAnalogChannelNum = std::min(gAnalogChannelNum, (unsigned int)NUMOUTPUT);
 
 	// tell the scope how many channels and the sample rate
 	scope.setup(gAudioChannelNum, context->audioSampleRate);
