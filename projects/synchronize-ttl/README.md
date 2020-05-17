@@ -17,4 +17,5 @@ and can look at the relative time of the others.
 
 - [Connecting a LED to the Raspberry Pi](https://thepihut.com/blogs/raspberry-pi-tutorials/27968772-turning-on-an-led-with-your-raspberry-pis-gpio-pins)
 - [Gpiozero](https://gpiozero.readthedocs.io/)
+- [CircuitPython](https://circuitpython.readthedocs.io/)
 
