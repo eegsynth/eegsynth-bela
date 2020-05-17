@@ -15,7 +15,7 @@ def upon_sync():
     if now.microsecond < 500000:
        os.system("sudo /home/pi/adjtime %d %d" % (0, -now.microsecond))
     else:
-       os.system("sudo /home/pi/adjtime %d %d" % (0, +now.microsecond))
+       os.system("sudo /home/pi/adjtime %d %d" % (0, 1000000-now.microsecond))
 
 button.when_pressed = upon_sync
 
