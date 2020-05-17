@@ -16,8 +16,8 @@ def blink():
 
 def sync():
   global usesync, lastsync
-  lastsync = datetime.now()
   usesync = True
+  lastsync = datetime.now()
   print("sync")
   blink()
 
@@ -34,7 +34,7 @@ while True:
     if not usesync:
       print("clock")
       blink()
-
-    if lastsync < next - timedelta(5):
-      usesync = False
+    else:
+      if now - lastsync > timedelta(seconds=5):
+        usesync = False
 
