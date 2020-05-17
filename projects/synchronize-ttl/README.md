@@ -23,7 +23,7 @@ The latter one gave as to be expected the best results with a
 very stable synchronization delay of less than 3 ms, except for the
 model 1B (in yellow), which had a delay of about 5 ms.
 
-![screenshot](Screenshot 2020-05-17 at 15.42.58.png)
+![screenshot](screenshot.png)
 
 ## References
 
