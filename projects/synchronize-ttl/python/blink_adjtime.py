@@ -7,7 +7,7 @@ import pause
 from datetime import datetime,timedelta
 
 red = LED(17)
-button = Button(18)
+button = Button(18, pull_up=False)
 
 def upon_sync():
     now = datetime.now()
