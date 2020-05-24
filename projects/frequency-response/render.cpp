@@ -10,7 +10,7 @@
 
 // static inline bool isnan(float x) { return x != x; }
 // static inline bool isinf(float x) { return !isnan(x) && isnan(x - x); }
-   
+
 Scope scope;
 Midi midi;
 WriteFile file;
@@ -95,7 +95,7 @@ void midiMessageCallback(MidiChannelMessage message, void* arg){
 	if (message.getType() == kmmControlChange) {
 		int cc = message.getDataByte(0);
 		if (cc==77)
-			gFrequency = ((float)message.getDataByte(1)/127.) * gSampleRate/2;
+			gFrequency = ((float)message.getDataByte(1)/127.) * 1000;
 		else if (cc==78)
 			gAmplitude = ((float)message.getDataByte(1)/127.);
 		else if (cc==79)
@@ -136,10 +136,10 @@ bool setup(BelaContext *context, void *userData)
 
 	file.setup("sweep.m"); //set the file name to write to
 	file.setHeader("x = [\n"); //set one or more lines to be printed at the beginning of the file
-    file.setFooter("];\n"); //set one or more lines to be printed at the end of the file
-    file.setFormat("%8.2f, %6f, %6.2f, %6f, %6.2f\n"); // set the format that you want to use for your output. Please use %f only (with modifiers)
-    file.setFileType(kText);
-        
+	file.setFooter("];\n"); //set one or more lines to be printed at the end of the file
+	file.setFormat("%8.2f, %6f, %6.2f, %6f, %6.2f\n"); // set the format that you want to use for your output. Please use %f only (with modifiers)
+	file.setFileType(kText);
+
 	return status;
 }
 
@@ -159,14 +159,14 @@ void render(BelaContext *context, void *userData)
 		float sine = sinf(gPhase);
 		float signal = gAmplitude * cose + gOffset;
 		
-		for(unsigned int ch = 0; ch < gAnalogChannelNum; ch++)
+		for (unsigned int ch = 0; ch < gAnalogChannelNum; ch++)
 			analogWriteOnce(context, n, ch, signal *AnalogOutputScale + AnalogOutputOffset );
 		
-		for(unsigned int ch = 0; ch < gAudioChannelNum; ch++)
+		for (unsigned int ch = 0; ch < gAudioChannelNum; ch++)
 			audioWrite(context, n, ch, signal * AudioOutputScale + AudioOutputOffset );
 		
-		float analogVal = analogRead(context, n, 0);
-		float audioVal = audioRead(context, n, 0);
+		float  analogVal = analogRead(context, n, 0);
+		float  audioVal = audioRead(context, n, 0);
 		
 		scopeval[0] = signal;
 		scopeval[1] = analogVal * AnalogInputScale + AnalogInputOffset;
@@ -204,7 +204,7 @@ void render(BelaContext *context, void *userData)
 
 			// complete the discrete Fourier transform
 			float analogAmplitude = sqrtf(analogDFT[0]*analogDFT[0] + analogDFT[1]*analogDFT[1]);
-			float analogPhase = atan2f(analogDFT[1], analogDFT[0]) * 180 / (float)M_PI;
+			float analogPhase = atan2f(analogDFT[1], analogDFT[0]) * 180 / (float )M_PI;
 			// analogPhase -= phaseDelay;
 			analogPhase -= 0.1388 * gFrequency; // this was experimentally determined for a block size of 8 samples
 			analogPhase -= 180 * (int)(analogPhase/180);
