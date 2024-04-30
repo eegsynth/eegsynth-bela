@@ -11,22 +11,28 @@ fmin = min(frequency(frequency>0));
 fmax = max(frequency);
 
 close all
-figure
-set(gcf, 'Position', [50 50 800 600])
+figure(3)
+set(gcf, 'Position', [50 50 480 400])
 
-subplot(2,2,1)
+subplot(2,1,1)
 loglog(frequency, analogAmplitude, 'b.-'); title('analogAmplitude')
 axis([fmin fmax 0.1 10]);
 
-subplot(2,2,3)
+subplot(2,1,2)
 semilogx(frequency, analogPhase, 'b.-'); title('analogPhase')
 axis([fmin fmax -180 180]);
 
-subplot(2,2,2)
+%%
+
+close all
+figure(4)
+set(gcf, 'Position', [50 50 480 400])
+
+subplot(2,1,1)
 loglog(frequency, audioAmplitude, 'g.-'); title('audioAmplitude')
 axis([fmin fmax 0.1 10]);
 
-subplot(2,2,4)
+subplot(2,1,2)
 semilogx(frequency, audioPhase, 'g.-'); title('audioPhase')
 axis([fmin fmax -180 180]);
 
